@@ -112,3 +112,16 @@ idEmprestimo INT NOT NULL,
 idLivro INT NOT NULL,
 CONSTRAINT pk_emprestimos_livros PRIMARY KEY (idEmprestimo, idLivro)
 );
+
+CREATE TABLE multas(
+    idMultas INT AUTO_INCREMENT NOT NULL,
+    valor FLOAT(6,2),
+    multa_existente TINYINT,
+    multa_atrasada TINYINT,
+    data_pagamento DATETIME,
+    idEmprestimo INT NOT NULL,
+    idLivro INT NOT NULL,
+    CONSTRAINT PRIMARY KEY (idMultas),
+    CONSTRAINT pk_emprestimo_multa FOREIGN KEY (idEmprestimo) REFERENCES emprestimos(idEmprestimo),
+    CONSTRAINT pk_emprestimo_livro FOREIGN KEY (idLivros) REFERENCES livros(idLivro)
+);
