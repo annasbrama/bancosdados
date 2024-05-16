@@ -22,6 +22,10 @@ CONSTRAINT PRIMARY KEY (idLivro),
 CONSTRAINT fk_livros_editora FOREIGN KEY (idEditora) REFERENCES editoras(idEditora)
 );
 
+SELECT * FROM editoras
+ALTER TABLE livros MODIFY COLUMN edicao CHAR(2) NOT NULL;
+ALTER TABLE livros ADD FOREIGN KEY (idEditora) REFERENCES editoras(idEditora);
+
 CREATE TABLE autoresLivros(
 idAutor INT NOT NULL,
 idLivro INT NOT NULL,
@@ -95,14 +99,15 @@ CONSTRAINT fk_contatosTelefonicos_associados FOREIGN KEY (idAssociado) REFERENCE
 CONSTRAINT fk_contatoTelefonico_tiposContatoTel FOREIGN KEY (idTipoContatoTelefonico) REFERENCES TiposContatosTelefonicos(idTipoContatoTelefonico)
 );
 
+/**ALTER TABLE contatosTelefonicos MODIFY COLUMN numero VARCHAR(9) NOT NULL;**/
+
 CREATE TABLE funcionarios(
-idFuncionarios INT AUTO_INCREMENT NOT NULL,
+idFuncionario INT AUTO_INCREMENT NOT NULL,
 nomeFuncionario VARCHAR(50) NOT NULL,
 loginFuncionario VARCHAR(50) NOT NULL,
-senhaFuncionario VARCHAR(50) NOT NULL,
+senhaFuncionario VARCHAR(8) NOT NULL,
 CONSTRAINT PRIMARY KEY (idFuncionario)
 );
-
 
 /**DROP TABLE emailAssociado
 DROP TABLE enderecoassociado;**/
@@ -110,19 +115,16 @@ DROP TABLE enderecoassociado;**/
 /**ALTER TABLE enderecoassociado MODIFY COLUMN bairro VARCHAR(10) NOT NULL;
 ALTER TABLE enderecoassociado MODIFY COLUMN cep VARCHAR(8) NOT NULL;**/
 
-
-
 /**ALTER TABLE contatos MODIFY COLUMN numero VARCHAR(9) NOT NULL;**/
-
 
 CREATE TABLE emprestimos(
 idEmprestimo INT AUTO_INCREMENT NOT NULL,
-dataRetirada DATE NOT NULL,
-dataPrazo DATE NOT NULL,
-idFuncionarios INT NOT NULL,
+dataEmprestimo DATE NOT NULL,
+dataDevolucao DATE NOT NULL,
+idFuncionario INT NOT NULL,
 idAssociado INT NOT NULL,
 CONSTRAINT PRIMARY KEY (idEmprestimo),
-CONSTRAINT fk_funcionario_emprestimo FOREIGN KEY (idFuncionarios) REFERENCES funcionarios(idFuncionarios),
+CONSTRAINT fk_funcionario_emprestimo FOREIGN KEY (idFuncionario) REFERENCES funcionarios(idFuncionario),
 CONSTRAINT fk_associado_emprestimo FOREIGN KEY (idAssociado) REFERENCES associados(idAssociado)
 );
 
@@ -136,9 +138,12 @@ DROP TABLE contatos
 DROP TABLE tiposContatosTel**/
 
 CREATE TABLE emprestimosLivros(
+dataDevolucaoEfetiva DATETIME NOT NULL, 
 idEmprestimo INT NOT NULL,
 idLivro INT NOT NULL,
-CONSTRAINT pk_emprestimos_livros PRIMARY KEY (idEmprestimo, idLivro)
+CONSTRAINT pk_emprestimos_Livros PRIMARY KEY (idEmprestimo, idLivro),
+CONSTRAINT fk_emprestimosLivros_emprestimos FOREIGN KEY (idEmprestimo) REFERENCES emprestimos(idEmprestimo),
+CONSTRAINT fk_emprestimoLivros_livros FOREIGN KEY (idLivro) REFERENCES livros(idLivro)
 );
 
 
@@ -146,15 +151,19 @@ CONSTRAINT pk_emprestimos_livros PRIMARY KEY (idEmprestimo, idLivro)
 
 CREATE TABLE multas(
 idMultas INT AUTO_INCREMENT NOT NULL,
-valor FLOAT(6,2),
-multa_existente TINYINT,
-multa_atrasada TINYINT,
-data_pagamento DATETIME,
+valor FLOAT(6,2) NOT NULL,
+statusMulta BOOLEAN NOT NULL,
+dataPagamento DATETIME,
 idEmprestimo INT NOT NULL,
 idLivro INT NOT NULL,
 CONSTRAINT PRIMARY KEY (idMultas),
-CONSTRAINT pk_emprestimo_multa FOREIGN KEY (idEmprestimo) REFERENCES emprestimos(idEmprestimo),
-CONSTRAINT pk_emprestimo_livro FOREIGN KEY (idLivro) REFERENCES livros(idLivro)
+CONSTRAINT pk_multaEmprestimoLivros_Emprestimos FOREIGN KEY (idEmprestimo) REFERENCES emprestimos(idEmprestimo),
+CONSTRAINT pk_multaEmprestimoLivros_Livros FOREIGN KEY (idLivro) REFERENCES livros(idLivro)
 );
 
-SELECT * FROM associados;
+DROP TABLE multas;
+
+livroseditoras
+
+
+/**SELECT * FROM associados;**/
