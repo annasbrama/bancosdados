@@ -68,23 +68,68 @@ SELECT nome, qtdpaginas, editoras.nomeEditora FROM livros
 INNER JOIN autoreslivros
 ON livros.idLivro = autoreslivros.idLivro
 INNER JOIN autores
-ON autores.idAutor = autoreslivros.idLivro
+ON autores.idAutor = autoreslivros.idAutor
 INNER JOIN editoras
 ON editoras.ideditora = livros.idEditora
 GROUP BY livros.idlivro
 HAVING COUNT(autoreslivros.idAutor)>=2
 
 SELECT * FROM autoreslivros
+SELECT * FROM autores
 
-//*Relatório de quantos livros cada autor escreveu
+/*Relatório de quantos livros cada autor escreveu
 levando em conta apenas os autores que escreveram mais de 2
 livros. Tudo isto em ordem alfabética por nome do autor*/ 
 
-SELECT nome, autores.nomeAutor FROM livros 
-INNER JOIN autoreslivros
-ON livros.idLivro = autoreslivros.idLivro
+SELECT autores.nomeAutor FROM autoreslivros 
+INNER JOIN livros
+ON autoreslivros.idLivro = livros.idLivro
 INNER JOIN autores
-ON autores.idAutor = autoreslivros.idLivro
-GROUP BY livros.idlivro
+ON autores.idAutor = autoreslivros.idAutor
+GROUP BY nomeAutor
 HAVING COUNT(autoreslivros.idAutor)>=2 
 ORDER BY 'Começando do A' asc
+
+/*Trazer quantos emprestimos foram realizados por data*/
+SELECT dataEmprestimo, COUNT(idEmprestimo) AS 'Quantidade de emp. no dia' FROM emprestimos
+GROUP BY dataEmprestimo
+HAVING COUNT(emprestimos.dataEmprestimo) 
+/* select dataemprestimo, count(idemprestimo) as 'total de emprestimos' from emprestimos
+group by dataemprestimo
+order by dataemprestimo */
+
+
+
+
+/*Sumiu um livro na biblioteca e precisamos saber o histórico
+dos emprestimos deste livro. 
+A query deve trazer o nome de quem o emprestou, a data, o nome 
+do funcionario. Escolha um livro para servir como filtro da busca.
+O resultado deve ser mostrado da data mais atual para a mais antiga*/
+
+/*SELECT * FROM livros 41
+SELECT * FROM emprestimoslivros 41
+SELECT * FROM emprestimos dataEmprestimo
+SELECT * FROM associados nomeAssociado 8
+SELECT * FROM funcionarios nomeFuncionario 1*/
+
+SELECT associados.nomeAssociado, emprestimos.dataEmprestimo, funcionarios.nomeFuncionario FROM emprestimoslivros
+INNER JOIN emprestimos ON emprestimos.idemprestimo= emprestimoslivros.idemprestimo
+INNER JOIN associados ON associados.idassociado = emprestimos.idassociado
+INNER JOIN funcionarios ON funcionarios.idFuncionario = emprestimos.idFuncionario
+INNER JOIN livros ON livros.idlivro = emprestimoslivros.idlivro 
+WHERE livros.idlivro=41
+order BY dataemprestimo DESC
+
+/* select nomeFuncionario, dataEmprestimo, dataDevolucaoEfetiva, nomeAssociado from funcionarios
+inner join emprestimos
+on funcionarios.idFuncionario = emprestimos.idFuncionario
+inner join associados
+on associaods.idAssociado = emprestimos.idAssociado
+inner join emprestimosLivros
+on emprestimoslivros.idEmprestimo = emprestimos.idEmprestimo
+inner join livros
+on emprestimoslivros.idlivro = livros.idlivro
+where nome = 'A cantiga dos pássaros e das serpentes'
+order by dataEmprestimo desc */
+

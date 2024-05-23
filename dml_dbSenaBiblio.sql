@@ -26,6 +26,8 @@ VALUES ('Java para Leigos', 'do basico ao avançado da linguagem', '902801702998
 ('Criador do Linux', 'Historia do Linus Torvalds', '37830213224799', 159, '1a', 3),
 ('A cantiga dos pássaros e das serpentes', 'aves e cobras?', '76829113224799', 156, '3a', 2); *//
 
+INSERT INTO autoresLivros (idAutor, idLivro) VALUES (6, 41), (5, 41), (7, 42);
+
 INSERT INTO livros (nome, sinopse, isbn, qtdPaginas, edicao, idEditora) 
 VALUES ('Java para Leigos', 'do basico ao avançado da linguagem', '9028017029981', 150, '2a', 3); 
 
