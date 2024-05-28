@@ -113,6 +113,7 @@ SELECT * FROM emprestimos dataEmprestimo
 SELECT * FROM associados nomeAssociado 8
 SELECT * FROM funcionarios nomeFuncionario 1*/
 
+CREATE VIEW VW_EmprestimosPorFuncionarioEAssociado AS 
 SELECT associados.nomeAssociado, emprestimos.dataEmprestimo, funcionarios.nomeFuncionario FROM emprestimoslivros
 INNER JOIN emprestimos ON emprestimos.idemprestimo= emprestimoslivros.idemprestimo
 INNER JOIN associados ON associados.idassociado = emprestimos.idassociado
@@ -120,6 +121,8 @@ INNER JOIN funcionarios ON funcionarios.idFuncionario = emprestimos.idFuncionari
 INNER JOIN livros ON livros.idlivro = emprestimoslivros.idlivro 
 WHERE livros.idlivro=41
 order BY dataemprestimo DESC
+
+SELECT * FROM vw_emprestimosporfuncionarioeassociado
 
 /* select nomeFuncionario, dataEmprestimo, dataDevolucaoEfetiva, nomeAssociado from funcionarios
 inner join emprestimos
@@ -133,3 +136,39 @@ on emprestimoslivros.idlivro = livros.idlivro
 where nome = 'A cantiga dos pássaros e das serpentes'
 order by dataEmprestimo desc */
 
+/* views: tabela virtual para visualizar os dados dentro de entidades do banco 
+create view vw_*nomedaseleção* AS */
+
+/* criar uma view que traga o nome, o celular e o email dos associados. nome da view: AssociadoContatos*/
+
+CREATE VIEW VW_AssociadosContatos AS
+SELECT nomeAssociado, ddd, numero, email FROM associados 
+INNER JOIN contatostelefonicos
+ON contatostelefonicos.idAssociado = associados.idAssociado
+INNER JOIN emails
+ON emails.idassociado = associados.idassociado
+
+SELECT * FROM vw_associadoscontatos
+DROP VIEW vw_associadoscontatos
+
+/*stored procedures - procedimentos armazenados 
+Criar uma procedure para inserir uaa editora */
+
+/* pi = procedure insert, pu = procedure update, ps = procedure search */
+CREATE PROCEDURE pi_Editoras 
+(IN nome VARCHAR(30))
+INSERT INTO editoras(nomeEditora) VALUES (nome);
+
+CALL pi_Editoras ('Abril')
+DROP PROCEDURE pi_Editoras
+SELECT * FROM editoras
+
+/* criar procedure que traga quantos emprestimos feitos por associados */
+CREATE PROCEDURE ps_Associados
+(in nomeAssociado VARCHAR(50), dataEmprestimo DATE) FROM associados 
+INNER JOIN emprestimos ON emprestimos.idAssociado= associados.idAssociado
+WHERE 
+
+
+
+/* que traga quantos emprestimos foram feitos por determinado associado por nome */
