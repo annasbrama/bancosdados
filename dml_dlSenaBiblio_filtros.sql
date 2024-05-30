@@ -164,11 +164,34 @@ DROP PROCEDURE pi_Editoras
 SELECT * FROM editoras
 
 /* criar procedure que traga quantos emprestimos feitos por associados */
-CREATE PROCEDURE ps_Associados
-(in nomeAssociado VARCHAR(50), dataEmprestimo DATE) FROM associados 
-INNER JOIN emprestimos ON emprestimos.idAssociado= associados.idAssociado
-WHERE 
 
+/* 1) o que eu quero na tela? SELECT
+   2) onde estão os dados que eu quero na tela? tabelas (JOIN)
+	3) tenho que agrupar? GROUP BY
+	4) tem filtro de coluna nativa? WHERE
+	5) tem filtro de agrupamento? HAVING
+	6) preciso ordenar? ORDER BY  */
+	
+CREATE PROCEDURE ps_Associados_QtdEmprestimos()
+SELECT nomeAssociado, COUNT(idemprestimo) FROM associados
+INNER JOIN emprestimos ON associados.idAssociado = emprestimos.idAssociado
+GROUP BY nomeAssociado
 
+CALL ps_Associados_QtdEmprestimos
+
+SELECT * FROM emprestimos
 
 /* que traga quantos emprestimos foram feitos por determinado associado por nome */
+
+CREATE PROCEDURE ps_EmprestimosPorAssociado
+(IN nomeBuscado VARCHAR(50))
+SELECT COUNT(idemprestimo) AS 'Qtd Emprestimos' FROM emprestimos
+INNER JOIN associados ON emprestimos.idAssociado = associados.idAssociado
+WHERE nomeAssociado = nomeBuscado
+
+CALL ps_EmprestimosPorAssociado ('Arthur Tiengo');
+
+SELECT * FROM associados
+
+DROP PROCEDURE ps_EmprestimosPorNome
+
